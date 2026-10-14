@@ -6,7 +6,7 @@ App Android para acompanhar o **Fortaleza Esporte Clube**: placar ao vivo com la
 - **Ao vivo:** placar e minuto atualizados a cada 30 s enquanto a bola rola.
 - **Lances:** toque em qualquer jogo para ver gols (com assistência), gols contra, cartões e substituições (quem entra e quem sai).
 - **Notícias:** busca automática no ge e no O Povo, só do Fortaleza, com foto. A mais recente aparece em destaque. Toque para abrir a matéria.
-- **Visual:** glassmorphism, com painéis de vidro sobre um fundo com luzes nas cores do clube. Puxe a tela para baixo para atualizar.
+- **Visual:** escuro sólido, com cartões grafite e detalhes em vermelho e azul. Puxe a tela para baixo para atualizar.
 
 ## Instalar no celular
 

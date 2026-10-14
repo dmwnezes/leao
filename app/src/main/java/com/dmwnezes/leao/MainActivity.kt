@@ -78,7 +78,7 @@ private fun App() {
     var aberto by rememberSaveable { mutableStateOf<String?>(null) }
     BackHandler(aberto != null) { aberto = null }
 
-    Box(Modifier.fillMaxSize().fundoTricolor()) {
+    Box(Modifier.fillMaxSize().fundo()) {
         Column(Modifier.fillMaxSize()) {
             Topo()
             Box(Modifier.weight(1f)) {
@@ -101,7 +101,7 @@ private fun Topo() {
         Modifier.statusBarsPadding().padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(Modifier.size(48.dp).vidro(16.dp), contentAlignment = Alignment.Center) {
+        Box(Modifier.size(48.dp).painel(16.dp), contentAlignment = Alignment.Center) {
             AsyncImage(logoFortaleza, "Fortaleza", Modifier.size(34.dp))
         }
         Spacer(Modifier.width(14.dp))
@@ -118,7 +118,7 @@ private fun Topo() {
 private fun BarraAbas(aba: Int, trocar: (Int) -> Unit, modifier: Modifier) {
     Row(
         modifier.navigationBarsPadding().padding(horizontal = 48.dp, vertical = 14.dp)
-            .vidro(30.dp, intensidade = 1.6f).background(Noite.copy(alpha = 0.35f)).padding(6.dp),
+            .painel(30.dp, intensidade = 1.6f).padding(6.dp),
     ) {
         listOf("Jogos" to Icons.Rounded.SportsSoccer, "Notícias" to Icons.Rounded.Newspaper).forEachIndexed { i, (nome, icone) ->
             val ativo = aba == i
@@ -203,7 +203,7 @@ private fun Destaque(j: Jogo, onClick: (() -> Unit)? = null) {
     val vivo = j.estado == "in"
     Column(
         Modifier.fillMaxWidth()
-            .vidro(28.dp, tom = if (vivo) Vermelho else Color.White, intensidade = if (vivo) 1.4f else 1f)
+            .painel(28.dp, tom = if (vivo) Vermelho else Color.White, intensidade = if (vivo) 1.4f else 1f)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
             .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -247,7 +247,7 @@ private fun Destaque(j: Jogo, onClick: (() -> Unit)? = null) {
 @Composable
 private fun Escudo(t: Time, modifier: Modifier) {
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(Modifier.size(72.dp).vidro(36.dp), contentAlignment = Alignment.Center) {
+        Box(Modifier.size(72.dp).painel(36.dp), contentAlignment = Alignment.Center) {
             AsyncImage(t.logo, t.nome, Modifier.size(48.dp))
         }
         Spacer(Modifier.height(8.dp))
@@ -262,7 +262,7 @@ private fun Escudo(t: Time, modifier: Modifier) {
 private fun LinhaJogo(j: Jogo, onClick: () -> Unit) {
     val local = j.inicio.atZone(fuso)
     Row(
-        Modifier.fillMaxWidth().vidro(20.dp).clickable(onClick = onClick).padding(horizontal = 14.dp, vertical = 12.dp),
+        Modifier.fillMaxWidth().painel(20.dp).clickable(onClick = onClick).padding(horizontal = 14.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(Modifier.width(44.dp), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -334,7 +334,7 @@ private fun TelaPartida(id: String, voltar: () -> Unit) {
 
     Column(Modifier.fillMaxSize()) {
         Row(Modifier.padding(horizontal = 16.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.size(44.dp).vidro(22.dp).clickable(onClick = voltar), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(44.dp).painel(22.dp).clickable(onClick = voltar), contentAlignment = Alignment.Center) {
                 Icon(Icons.AutoMirrored.Rounded.ArrowBack, "Voltar", tint = Color.White)
             }
             Spacer(Modifier.width(12.dp))
@@ -358,7 +358,7 @@ private fun TelaPartida(id: String, voltar: () -> Unit) {
                 if (p.lances.isEmpty()) item {
                     Text(
                         if (p.jogo.estado == "pre") "A bola ainda não rolou." else "Nenhum lance registrado ainda.",
-                        color = TextoSuave, modifier = Modifier.fillMaxWidth().vidro(20.dp).padding(18.dp),
+                        color = TextoSuave, modifier = Modifier.fillMaxWidth().painel(20.dp).padding(18.dp),
                     )
                 }
                 // Mais recente primeiro durante o jogo; em ordem depois.
@@ -381,14 +381,14 @@ private fun LinhaLance(l: Lance, j: Jogo, ultimo: Boolean) {
         // Linha do tempo: bolinha com o ícone e um fio até o próximo lance.
         Column(Modifier.fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally) {
             Box(
-                Modifier.padding(top = 6.dp).size(34.dp).vidro(17.dp, tom = if (gol) AzulClaro else Color.White, intensidade = if (gol) 2f else 1f),
+                Modifier.padding(top = 6.dp).size(34.dp).painel(17.dp, tom = if (gol) AzulClaro else Color.White, intensidade = if (gol) 2f else 1f),
                 contentAlignment = Alignment.Center,
             ) { IconeLance(l.tipo) }
             if (!ultimo) Box(Modifier.width(2.dp).weight(1f).background(Color.White.copy(alpha = 0.12f)))
         }
         Spacer(Modifier.width(12.dp))
         Row(
-            Modifier.weight(1f).padding(bottom = 10.dp).vidro(18.dp, intensidade = if (gol) 1.5f else 1f).padding(12.dp),
+            Modifier.weight(1f).padding(bottom = 10.dp).painel(18.dp, intensidade = if (gol) 1.5f else 1f).padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(Modifier.weight(1f)) {
@@ -448,7 +448,7 @@ private fun TelaNoticias() {
 
 @Composable
 private fun NoticiaPrincipal(n: Noticia, onClick: () -> Unit) {
-    Column(Modifier.fillMaxWidth().vidro(28.dp).clickable(onClick = onClick)) {
+    Column(Modifier.fillMaxWidth().painel(28.dp).clickable(onClick = onClick)) {
         Box(Modifier.fillMaxWidth().height(210.dp)) {
             Foto(n.imagem, Modifier.fillMaxSize())
             Box(Modifier.fillMaxSize().background(Brush.verticalGradient(0.45f to Color.Transparent, 1f to Noite.copy(alpha = 0.85f))))
@@ -467,7 +467,7 @@ private fun NoticiaPrincipal(n: Noticia, onClick: () -> Unit) {
 
 @Composable
 private fun NoticiaLinha(n: Noticia, onClick: () -> Unit) {
-    Row(Modifier.fillMaxWidth().vidro(22.dp).clickable(onClick = onClick).padding(10.dp)) {
+    Row(Modifier.fillMaxWidth().painel(22.dp).clickable(onClick = onClick).padding(10.dp)) {
         Foto(n.imagem, Modifier.size(96.dp).clip(RoundedCornerShape(16.dp)))
         Column(Modifier.weight(1f).padding(start = 12.dp, end = 4.dp).heightIn(min = 96.dp), verticalArrangement = Arrangement.SpaceBetween) {
             Text(n.titulo, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, lineHeight = 20.sp, maxLines = 3, overflow = TextOverflow.Ellipsis)
@@ -499,7 +499,7 @@ private fun Carregando(erro: String?, tentar: () -> Unit) {
 @Composable
 private fun Aviso(texto: String, tentar: () -> Unit) {
     Column(
-        Modifier.fillMaxWidth().padding(horizontal = 16.dp).vidro(20.dp, tom = Vermelho, intensidade = 1.3f).padding(16.dp),
+        Modifier.fillMaxWidth().padding(horizontal = 16.dp).painel(20.dp, tom = Vermelho, intensidade = 1.3f).padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(texto, fontWeight = FontWeight.SemiBold)
