@@ -26,7 +26,9 @@ data class Jogo(
     val estadio: String?,
 )
 
-data class Lance(val minuto: String, val icone: String, val titulo: String, val detalhe: String?, val time: String?)
+enum class TipoLance { GOL, GOL_CONTRA, AMARELO, VERMELHO, SUBSTITUICAO, PENALTI_PERDIDO }
+
+data class Lance(val minuto: String, val tipo: TipoLance, val titulo: String, val detalhe: String?, val time: String?)
 
 data class Partida(val jogo: Jogo, val lances: List<Lance>)
 
@@ -144,20 +146,20 @@ private fun lerLance(k: JSONObject): Lance? {
     val time = k.optJSONObject("team")?.optString("displayName")?.ifBlank { null }
     val gol = k.optBoolean("scoringPlay")
     return when {
-        tipo == "own-goal" -> Lance(minuto, "⚽", "Gol contra", nomes.firstOrNull(), time)
+        tipo == "own-goal" -> Lance(minuto, TipoLance.GOL_CONTRA, "Gol contra", nomes.firstOrNull(), time)
         gol -> Lance(
-            minuto, "⚽", if (tipo.contains("penalty")) "Gol de pênalti" else "Gol",
+            minuto, TipoLance.GOL, if (tipo.contains("penalty")) "Gol de pênalti" else "Gol",
             listOfNotNull(nomes.getOrNull(0), nomes.getOrNull(1)?.let { "assist. $it" }).joinToString(" · ").ifBlank { null },
             time,
         )
-        tipo == "yellow-card" -> Lance(minuto, "🟨", "Cartão amarelo", nomes.firstOrNull(), time)
-        tipo == "red-card" -> Lance(minuto, "🟥", "Cartão vermelho", nomes.firstOrNull(), time)
+        tipo == "yellow-card" -> Lance(minuto, TipoLance.AMARELO, "Cartão amarelo", nomes.firstOrNull(), time)
+        tipo == "red-card" -> Lance(minuto, TipoLance.VERMELHO, "Cartão vermelho", nomes.firstOrNull(), time)
         tipo == "substitution" -> Lance(
-            minuto, "🔁", "Substituição",
+            minuto, TipoLance.SUBSTITUICAO, "Substituição",
             listOfNotNull(nomes.getOrNull(0)?.let { "entra $it" }, nomes.getOrNull(1)?.let { "sai $it" }).joinToString(" · ").ifBlank { null },
             time,
         )
-        tipo.contains("penalty") && tipo.contains("miss") -> Lance(minuto, "❌", "Pênalti perdido", nomes.firstOrNull(), time)
+        tipo.contains("penalty") && tipo.contains("miss") -> Lance(minuto, TipoLance.PENALTI_PERDIDO, "Pênalti perdido", nomes.firstOrNull(), time)
         else -> null
     }
 }

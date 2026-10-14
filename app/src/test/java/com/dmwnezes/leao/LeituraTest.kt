@@ -46,11 +46,19 @@ class LeituraTest {
         assertEquals("Cartão amarelo", p.lances[0].titulo)
     }
 
-    @Test fun noticiasDoGoogle() {
-        val n = lerRss(arquivo("news.rss"))
-        assertTrue(n.isNotEmpty())
-        assertTrue(n.none { it.fonte != null && it.titulo.endsWith(" - ${it.fonte}") })
+    @Test fun noticiasComFotoSoDoFortaleza() {
+        val ge = lerRss(arquivo("ge.xml"), "ge")
+        val opovo = lerRss(arquivo("opovo.xml"), "O Povo")
+        val n = juntar(listOf(ge, opovo))
+        assertTrue(n.size >= 20)
+        assertTrue(n.all { ehDoFortaleza(it) })
+        assertTrue(n.none { "/times/ceara/" in it.link })
+        // Resumos de partida do ge vêm sem foto; o app mostra um quadro tricolor no lugar.
+        assertTrue(n.count { it.imagem?.startsWith("https://") == true } >= n.size - 3)
         assertTrue(n.zipWithNext().all { (a, b) -> (a.data ?: Instant.MIN) >= (b.data ?: Instant.MIN) })
+        assertTrue(n.any { it.fonte == "ge" } && n.any { it.fonte == "O Povo" })
+        val primeira = ge.first()
+        assertEquals("Torcida do Fortaleza ainda sonha com o acesso direto à Série A. Protesto foi pacífico", primeira.resumo)
     }
 
     @Test fun contagemPorDiaDoCalendario() {
